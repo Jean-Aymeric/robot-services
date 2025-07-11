@@ -68,7 +68,7 @@ Créer une architecture de microservices avec Spring Boot permettant de construi
 - Valider le JSON d'entrée
 
 ### Le Service de Sauvegarde doit :
-- Utiliser se connecter à la BDD MariaDB :
+- Utiliser à la BDD MariaDB fournie :
   - host : `jeanaymeric.hd.free.fr`
   - port : `8601`
   - user : `nexauser`
