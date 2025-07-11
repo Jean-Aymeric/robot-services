@@ -68,43 +68,37 @@ Créer une architecture de microservices avec Spring Boot permettant de construi
 - Valider le JSON d'entrée
 
 ### Le Service de Sauvegarde doit :
-- Utiliser un système de fichiers JSON pour la persistance
-- Stocker les configurations dans un dossier `data/` avec des fichiers JSON
-- Gérer les opérations CRUD complètes
-- Générer automatiquement les IDs (incrémental)
-- Avoir une structure : `data/robot-{id}.json`
+- Utiliser se connecter à la BDD MariaDB :
+  - host : `jeanaymeric.hd.free.fr`
+  - port : `8601`
+  - user : `nexauser`
+  - password : `secret`
+  - database : `robot`
+- Gérer les opérations CRUD complètes :
+  - Create : procédure stockée ``
+  - Read : procédure stockée `getRobotById(robotId) : robot`
+  - Update : procédure stockée `updateRobot(robotId, user, head, body, leftArm, rightArm, movement) : robot`
+  - Delete : procédure stockée `deleteRobot(robotId, user) : 0/1`
+  - ReadAll : procédure stockée `getAllRobotsByUser(user) : [robot]`
 
-## Structure de Stockage
-```
-robot-storage-service/
- ├── src/main/java/...
- ├── data/
- │ ├── robot-1.json
- │ ├── robot-2.json
- │ └── ...
- └── pom.xml
-```
+Ces procédures stockées renvoient des données au format JSON.
 
-## Exemple de Fichier JSON Stocké
-
-Fichier : `data/robot-123.json`
+Un robot.json renvoyé par la bdd est sous cette forme :
 ```json
 {
-  "id": 123,
-  "name": "Mon Robot Favori",
-  "configuration": {
-    "headId": 1,
-    "bodyId": 2,
-    "leftArmId": 1,
-    "rightArmId": 3,
-    "movementId": 2
-  },
-  "createdAt": "2024-01-15T10:30:00"
+  "id": 1,
+  "user": "JAD",
+  "head": 1,
+  "body": 2,
+  "leftArm": 1,
+  "rightArm": 3,
+  "movement": 2
 }
 ```
+Pour la donnée `user`, il s'agit d'un tag permettant d'identifier dans la BDD, quels robots correspondent à quel étudiant.
 
 ## Structure des Projets Maven
-Chaque service doit être un projet Maven séparé :
+Chaque service doit être un module Maven :
 ```
 robot-services
 ├── robot-arm-service/
@@ -142,21 +136,6 @@ Chaque service doit avoir son fichier `application.properties` :
 1. Code source complet pour tous les microservices
 2. Fichiers `pom.xml` configurés avec les bonnes dépendances
 3. Fichiers `application.properties` avec les ports
-
-## Dépendances Maven Requises
-
-Pour chaque service, inclure dans le `pom.xml` :
-- spring-boot-starter-web
-- spring-boot-starter-test
-
-Pour le service de sauvegarde, ajouter :
-- spring-boot-starter-data-jpa
-- pas de base de données obligatoirement, vous avez le choix entre un fichier JSON ou une base de données en mémoire (H2, SQLite, etc.)
-
-
-## Exemple de Structure de Contrôleur
-
-Chaque service doit avoir un contrôleur REST qui retourne les éléments ASCII correspondants selon l'ID demandé.
 
 ## Gestion des Erreurs
 
